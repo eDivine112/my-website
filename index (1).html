@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Secure Living in a Digital Age</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0a1628;
+      --blue: #1a3a6b;
+      --accent-blue: #2563eb;
+      --red: #dc2626;
+      --red-light: #ef4444;
+      --white: #ffffff;
+      --off-white: #f8f9fc;
+      --gray: #64748b;
+      --light-gray: #e2e8f0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--light-gray);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--navy);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--gray);
+      font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent-blue); }
+    .nav-cta {
+      background: var(--red); color: white;
+      padding: 0.5rem 1.2rem; border-radius: 6px;
+      text-decoration: none; font-size: 0.88rem; font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .nav-cta:hover { background: var(--red-light); transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 100px 8% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -40%; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -20%; left: 20%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-text { z-index: 1; animation: fadeUp 0.8s ease both; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(37,99,235,0.15);
+      border: 1px solid rgba(37,99,235,0.3);
+      color: #93c5fd;
+      padding: 0.35rem 0.9rem; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 1.8rem;
+    }
+    .hero-badge::before { content: '●'; color: #60a5fa; font-size: 0.5rem; }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.6rem);
+      font-weight: 900; line-height: 1.1;
+      color: var(--white); margin-bottom: 1rem;
+      letter-spacing: -0.03em;
+    }
+    .hero h1 em {
+      font-style: normal; color: #60a5fa;
+    }
+    .hero-sub {
+      font-size: 1.1rem; line-height: 1.7;
+      color: #94a3b8; margin-bottom: 2.5rem;
+      max-width: 480px; font-weight: 300;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--red); color: white;
+      padding: 0.85rem 2rem; border-radius: 8px;
+      text-decoration: none; font-weight: 600; font-size: 0.95rem;
+      transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 4px 20px rgba(220,38,38,0.35);
+    }
+    .btn-primary:hover { background: var(--red-light); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(220,38,38,0.4); }
+    .btn-secondary {
+      background: transparent; color: white;
+      padding: 0.85rem 2rem; border-radius: 8px;
+      text-decoration: none; font-weight: 500; font-size: 0.95rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
+
+    /* BOOK VISUAL */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      z-index: 1;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+    .book-wrapper {
+      position: relative;
+      perspective: 1000px;
+    }
+    .book {
+      width: 220px; height: 310px;
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%);
+      border-radius: 4px 12px 12px 4px;
+      box-shadow: -8px 8px 0 #0a1628, 20px 30px 60px rgba(0,0,0,0.6), 0 0 80px rgba(37,99,235,0.2);
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem 1.5rem 1.5rem;
+      position: relative; overflow: hidden;
+      transform: rotateY(-10deg) rotateX(3deg);
+      transition: transform 0.4s ease;
+    }
+    .book:hover { transform: rotateY(-5deg) rotateX(1deg); }
+    .book::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 12px;
+      background: linear-gradient(to right, #0f2460, #1e3a8a);
+      border-radius: 4px 0 0 4px;
+    }
+    .book::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--red);
+    }
+    .book-shield {
+      font-size: 3.5rem; text-align: center;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+    }
+    .book-title-text {
+      font-family: 'Playfair Display', serif;
+      color: white; font-size: 0.95rem; font-weight: 700;
+      text-align: center; line-height: 1.4;
+    }
+    .book-title-text span {
+      display: block; font-size: 0.7rem; font-weight: 400;
+      color: #93c5fd; margin-top: 0.4rem; font-family: 'DM Sans', sans-serif;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .book-author {
+      font-family: 'DM Sans', sans-serif;
+      color: #bfdbfe; font-size: 0.72rem;
+      text-align: center; letter-spacing: 0.1em;
+      text-transform: uppercase; border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 0.6rem;
+    }
+
+    /* SOCIAL PROOF */
+    .proof-bar {
+      background: var(--off-white);
+      border-top: 1px solid var(--light-gray);
+      border-bottom: 3px solid var(--accent-blue);
+      padding: 1.5rem 8%;
+      display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; align-items: center;
+    }
+    .proof-item { text-align: center; }
+    .proof-item strong {
+      display: block; font-size: 1.8rem; font-weight: 700;
+      color: var(--accent-blue); font-family: 'Playfair Display', serif;
+    }
+    .proof-item span { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* ABOUT / PROBLEM */
+    section { padding: 80px 8%; }
+
+    .section-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .section-body {
+      font-size: 1.05rem; line-height: 1.8; color: var(--gray);
+      max-width: 600px;
+    }
+
+    /* WHAT YOU'LL LEARN */
+    .learn-section { background: var(--off-white); }
+    .learn-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .learn-card {
+      background: white; border-radius: 12px;
+      padding: 1.8rem; border: 1px solid var(--light-gray);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .learn-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-blue);
+    }
+    .learn-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+    .learn-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .learn-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem; color: var(--navy); }
+    .learn-card p { font-size: 0.9rem; line-height: 1.6; color: var(--gray); }
+
+    /* ABOUT AUTHOR */
+    .author-section {
+      background: var(--navy); color: white;
+      display: grid; grid-template-columns: auto 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .author-avatar {
+      width: 180px; height: 180px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), #1e3a8a);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      border: 4px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+    .author-section .section-title { color: white; }
+    .author-section .section-body { color: #94a3b8; }
+    .author-cred {
+      display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap;
+    }
+    .cred-badge {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.4rem 0.9rem; border-radius: 20px;
+      font-size: 0.8rem; color: #93c5fd;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    /* NEWSLETTER */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--accent-blue) 0%, var(--blue) 100%);
+      color: white; text-align: center;
+      padding: 80px 8%;
+    }
+    .newsletter-section .section-title { color: white; margin-bottom: 0.8rem; }
+    .newsletter-section p { color: rgba(255,255,255,0.8); margin-bottom: 2.5rem; font-size: 1.05rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .nl-form {
+      display: flex; gap: 0; max-width: 480px; margin: 0 auto;
+      border-radius: 10px; overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+    .nl-form input {
+      flex: 1; padding: 1rem 1.2rem;
+      border: none; outline: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+      background: white; color: var(--navy);
+    }
+    .nl-form input::placeholder { color: #94a3b8; }
+    .nl-form button {
+      padding: 1rem 1.5rem;
+      background: var(--red); color: white;
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600; font-size: 0.95rem;
+      transition: background 0.2s; white-space: nowrap;
+    }
+    .nl-form button:hover { background: var(--red-light); }
+    .nl-note { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+
+    /* BUY SECTION */
+    .buy-section { text-align: center; background: white; }
+    .price-card {
+      display: inline-block;
+      background: var(--navy); color: white;
+      border-radius: 16px; padding: 3rem 3.5rem;
+      margin-top: 2.5rem;
+      box-shadow: 0 20px 60px rgba(10,22,40,0.15);
+      position: relative; overflow: hidden;
+    }
+    .price-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(to right, var(--red), var(--accent-blue));
+    }
+    .price-card .price {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem; font-weight: 900;
+      color: white; margin: 0.5rem 0;
+    }
+    .price-card .price sup { font-size: 1.5rem; vertical-align: super; }
+    .price-card .price-note { color: #94a3b8; font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .price-includes { list-style: none; text-align: left; margin-bottom: 2rem; }
+    .price-includes li {
+      padding: 0.4rem 0; font-size: 0.92rem; color: #cbd5e1;
+      display: flex; align-items: center; gap: 0.7rem;
+    }
+    .price-includes li::before { content: '✓'; color: #60a5fa; font-weight: 700; }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy); color: #64748b;
+      text-align: center; padding: 2rem 8%;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.85rem;
+    }
+    footer a { color: #60a5fa; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; padding: 100px 6% 60px; text-align: center; }
+      .hero-sub { margin: 0 auto 2.5rem; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { margin-top: 3rem; }
+      .author-section { grid-template-columns: 1fr; text-align: center; }
+      .author-avatar { margin: 0 auto; }
+      .author-cred { justify-content: center; }
+      nav .nav-links { display: none; }
+      .nl-form { flex-direction: column; border-radius: 10px; }
+      .nl-form input, .nl-form button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Secure<span>Living</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#learn">What's Inside</a></li>
+    <li><a href="#author">Author</a></li>
+    <li><a href="#newsletter">Newsletter</a></li>
+  </ul>
+  <a href="#buy" class="nav-cta">Get the Book</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">New Release · Cybersecurity for Everyone</div>
+    <h1>Stay Safe in a World That's <em>Always Online</em></h1>
+    <p class="hero-sub">A no-jargon, practical guide to protecting your digital life — your identity, your data, and your peace of mind. Written for real people, not just tech experts.</p>
+    <div class="hero-actions">
+      <a href="#buy" class="btn-primary">Get Your Copy</a>
+      <a href="#learn" class="btn-secondary">See What's Inside</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="book-wrapper">
+      <div class="book">
+        <div class="book-shield" style="font-size:2rem; font-weight:700; color:#60a5fa; text-align:center; letter-spacing:0.05em;">SECURE</div>
+        <div class="book-title-text">
+          Secure Living in a Digital Age
+          <span>A Practical Guide to Staying Safe Online</span>
+        </div>
+        <div class="book-author">Available Now</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<div class="proof-bar">
+  <div class="proof-item"><strong>5★</strong><span>Reader Rating</span></div>
+  <div class="proof-item"><strong>10+</strong><span>Core Topics Covered</span></div>
+  <div class="proof-item"><strong>100%</strong><span>Practical Advice</span></div>
+  <div class="proof-item"><strong>0</strong><span>Jargon Required</span></div>
+</div>
+
+<!-- ABOUT THE BOOK -->
+<section id="about">
+  <div class="section-label">About the Book</div>
+  <h2 class="section-title">Your digital life deserves real protection</h2>
+  <p class="section-body">
+    Every day, millions of people get hacked, scammed, or have their personal data stolen — and most of them never saw it coming. The scary part? It's not because they were careless. It's because nobody ever showed them what to look for.<br><br>
+    <em>Secure Living in a Digital Age</em> changes that. This book walks you through exactly what threats exist online, how to recognize them, and the simple, proven steps you can take today to protect yourself — no technical background needed.
+  </p>
+</section>
+
+<!-- WHAT YOU'LL LEARN -->
+<section id="learn" class="learn-section">
+  <div class="section-label">What's Inside</div>
+  <h2 class="section-title">Practical knowledge you'll use every day</h2>
+  <div class="learn-grid">
+    <div class="learn-card">
+      <h3>Passwords &amp; Access</h3>
+      <p>Why your current passwords are probably putting you at risk, and a simple system that actually works for managing them safely.</p>
+    </div>
+    <div class="learn-card">
+      <h3>Phishing &amp; Scams</h3>
+      <p>How to spot fake emails, messages, and websites before you click, including the tricks scammers are using right now.</p>
+    </div>
+    <div class="learn-card">
+      <h3>Device Security</h3>
+      <p>Keeping your phone, laptop, and smart devices from becoming entry points for attackers.</p>
+    </div>
+    <div class="learn-card">
+      <h3>Safe Browsing &amp; Wi-Fi</h3>
+      <p>What happens when you connect to public Wi-Fi and how to browse without leaving a trail of vulnerabilities.</p>
+    </div>
+    <div class="learn-card">
+      <h3>Protecting Your Finances</h3>
+      <p>Step-by-step habits for keeping your banking and payment information out of the wrong hands.</p>
+    </div>
+    <div class="learn-card">
+      <h3>Identity &amp; Privacy</h3>
+      <p>How to limit what companies and strangers can find out about you, and what to do if your data is ever exposed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AUTHOR -->
+<section id="author" class="author-section">
+  <div class="author-avatar" style="font-size:2.5rem; font-weight:700; color:#60a5fa; letter-spacing:0.05em;">AU</div>
+  <div>
+    <div class="section-label">Meet the Author</div>
+    <h2 class="section-title">Written by someone who lives this every day</h2>
+    <p class="section-body">
+      I work in tech and have spent years watching the same threats catch good, careful people off guard. Not because they were reckless, but because no one ever laid it out for them in plain language. That gap is exactly what this book is meant to close. Outside of writing, I share weekly cybersecurity insights through my LinkedIn newsletter, where thousands of readers get practical tips they can actually use. If you want to stay sharp on digital safety without wading through technical jargon, this community is the right place to be.
+    </p>
+    <div class="author-cred">
+      <div class="cred-badge">Cybersecurity Professional</div>
+      <div class="cred-badge">LinkedIn Newsletter Author</div>
+      <div class="cred-badge">Tech Educator</div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter" class="newsletter-section">
+  <div class="section-label" style="color: rgba(255,255,255,0.6)">Free Weekly Insights</div>
+  <h2 class="section-title">Stay ahead with the newsletter</h2>
+  <p>Every week I share one practical tip, one threat to know about, and one tool worth trying — straight to your inbox. No noise, just signal.</p>
+  <a href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7433630221976825856" target="_blank" class="btn-primary" style="display:inline-flex; font-size:1rem; padding:1rem 2.5rem; margin-top:0.5rem; text-decoration:none;">Subscribe on LinkedIn</a>
+  <p class="nl-note" style="margin-top:1.2rem;">Delivered through LinkedIn. Free to follow, unsubscribe any time.</p>
+</section>
+
+<!-- BUY -->
+<section id="buy" class="buy-section">
+  <div class="section-label">Get the Book</div>
+  <h2 class="section-title">Start protecting yourself today</h2>
+  <p class="section-body" style="margin: 0 auto; text-align: center;">
+    One book. Everything you need to feel genuinely secure online — not just sort of okay about it.
+  </p>
+  <div class="price-card">
+    <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #60a5fa;">Digital Edition</div>
+    <div class="price"><sup>$</sup>4.99</div>
+    <div class="price-note">One-time purchase · Instant access</div>
+    <ul class="price-includes">
+      <li>Full book (PDF + ePub format)</li>
+      <li>Practical checklists for every chapter</li>
+      <li>Lifetime access to future updates</li>
+      <li>Bonus: Quick-start security checklist</li>
+    </ul>
+    <a href="#" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1rem; padding: 1rem;">Buy Now — $4.99</a>
+    <p style="color: #64748b; font-size: 0.78rem; margin-top: 1rem;">30-day money-back guarantee. No questions asked.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <strong style="color: #e2e8f0;">Secure Living in a Digital Age</strong> · All rights reserved</p>
+  <p style="margin-top: 0.5rem;">
+    <a href="https://linkedin.com" target="_blank">LinkedIn Newsletter</a> ·
+    <a href="/cdn-cgi/l/email-protection#066e636a6a6946637e676b766a632865696b">Contact</a>
+  </p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  // Subscribe handler
+  function handleSubscribe() {
+    const input = document.querySelector('.nl-form input');
+    const email = input.value.trim();
+    if (!email || !email.includes('@')) {
+      input.style.border = '2px solid #dc2626';
+      setTimeout(() => input.style.border = 'none', 1500);
+      return;
+    }
+    const btn = document.querySelector('.nl-form button');
+    btn.textContent = '✓ You\'re in!';
+    btn.style.background = '#16a34a';
+    input.value = '';
+    input.placeholder = 'Thanks for subscribing!';
+    input.disabled = true;
+  }
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.learn-card, .proof-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform 
